@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Line endX="514.0" layoutX="195.0" layoutY="56.0" startX="-195.0" />
+      <Line endX="514.0" layoutX="195.0" layoutY="63.0" startX="-195.0" />
+      <Text layoutX="72.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HERRAMIENTA DE ENCRIPTACION">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Button layoutX="213.0" layoutY="203.0" mnemonicParsing="false" onAction="#encriptar_boton" prefHeight="75.0" prefWidth="284.0" text="Encriptar Archivo">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="213.0" layoutY="308.0" mnemonicParsing="false" onAction="#desencriptar_boton" prefHeight="75.0" prefWidth="284.0" text="Desencriptar Archivo">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>
