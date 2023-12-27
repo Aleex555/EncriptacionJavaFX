@@ -16,13 +16,10 @@ import org.bouncycastle.openpgp.PGPException;
 public class EncriptarController {
     File archivoEntrada;
     File archivoSalida;
-    File clave_publica;
+    File clave_publica1;
 
     @FXML
-    private TextField id_clave_publica;
-
-    @FXML
-    private Button archivo, archivo_salida;
+    private Button archivo, archivo_salida, id_clave_publica;
 
     @FXML
     private void back(ActionEvent event) {
@@ -31,9 +28,12 @@ public class EncriptarController {
 
     @FXML
     private void action_encriptar(ActionEvent event) {
-        if (archivoEntrada != null && archivoSalida != null && clave_publica != null) {
+        System.out.println(archivoEntrada.getName());
+        System.out.println(archivoSalida.getName());
+        System.out.println(clave_publica1.getName());
+        if (archivoEntrada != null && archivoSalida != null && clave_publica1 != null) {
             try {
-                EncriptadorGPG.encriptarArchivo(archivoEntrada, archivoSalida, clave_publica);
+                EncriptadorGPG.encriptarArchivo(archivoEntrada, archivoSalida, clave_publica1);
             } catch (IOException | PGPException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
@@ -54,10 +54,19 @@ public class EncriptarController {
     private void select_destino(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona el Archivo de Salida");
-        File archivoSalida = fileChooser.showSaveDialog(new Stage());
+        archivoSalida = fileChooser.showSaveDialog(new Stage());
         if (archivoSalida != null) {
-            // Actualizar el texto en algún control, como un TextField
             archivo_salida.setText(archivoSalida.getName());
+        }
+    }
+
+    @FXML
+    private void clave_publica(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecciona el Archivo de Salida");
+        clave_publica1 = fileChooser.showOpenDialog(new Stage());
+        if (clave_publica1 != null) {
+            id_clave_publica.setText(clave_publica1.getName());
         }
     }
 

@@ -32,7 +32,11 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <TextField fx:id="id_clave_publica" layoutX="355.0" layoutY="133.0" prefHeight="30.0" prefWidth="266.0" />
+      <Button fx:id="id_clave_publica" layoutX="355.0" layoutY="133.0"  mnemonicParsing="false" onAction="#clave_publica" prefHeight="30.0" prefWidth="266.0" >
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
       <Button fx:id="encriptar" layoutX="235.0" layoutY="366.0" mnemonicParsing="false" onAction="#action_encriptar" prefHeight="52.0" prefWidth="201.0" text="Encriptar">
          <font>
             <Font size="20.0" />
