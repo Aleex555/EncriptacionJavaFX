@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.Layout_Principal">
    <children>
       <Line endX="514.0" layoutX="195.0" layoutY="56.0" startX="-195.0" />
       <Line endX="514.0" layoutX="195.0" layoutY="63.0" startX="-195.0" />
@@ -16,12 +16,12 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Button layoutX="213.0" layoutY="203.0" mnemonicParsing="false" onAction="#encriptar_boton" prefHeight="75.0" prefWidth="284.0" text="Encriptar Archivo">
+      <Button fx:id="encriptar" layoutX="213.0" layoutY="203.0" mnemonicParsing="false" onAction="#encriptar_boton" prefHeight="75.0" prefWidth="284.0" text="Encriptar Archivo">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="213.0" layoutY="308.0" mnemonicParsing="false" onAction="#desencriptar_boton" prefHeight="75.0" prefWidth="284.0" text="Desencriptar Archivo">
+      <Button fx:id="desencriptar"  layoutX="213.0" layoutY="308.0" mnemonicParsing="false" onAction="#desencriptar_boton" prefHeight="75.0" prefWidth="284.0" text="Desencriptar Archivo">
          <font>
             <Font size="20.0" />
          </font>

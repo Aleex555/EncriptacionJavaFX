@@ -1,4 +1,4 @@
-package cat.iesesteveterradas;
+package com.project;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,7 +23,7 @@ public class Main extends Application {
         UtilsViews.addView(getClass(), "layout_desencriptar", "/assets/layout_desencriptar.fxml");
 
         Scene scene = new Scene(UtilsViews.parentContainer);
-        
+
         stage.setScene(scene);
         stage.setTitle("Animació entre vistes");
         stage.setMinWidth(windowWidth);

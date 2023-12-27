@@ -1,4 +1,4 @@
-package cat.iesesteveterradas;
+package com.project;
 
 import java.util.ArrayList;
 
@@ -166,4 +166,3 @@ public class UtilsViews {
         parentContainer.requestFocus();
     }
 }
-
