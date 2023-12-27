@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.encriptar">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.EncriptarController">
    <children>
       <Line endX="514.0" layoutX="195.0" layoutY="56.0" startX="-195.0" />
       <Line endX="514.0" layoutX="195.0" layoutY="63.0" startX="-195.0" />
@@ -33,17 +33,17 @@
          </font>
       </Text>
       <TextField fx:id="id_clave_publica" layoutX="355.0" layoutY="133.0" prefHeight="30.0" prefWidth="266.0" />
-      <Button layoutX="235.0" layoutY="366.0" mnemonicParsing="false" onAction="#action_encriptar" prefHeight="52.0" prefWidth="201.0" text="Encriptar">
+      <Button fx:id="encriptar" layoutX="235.0" layoutY="366.0" mnemonicParsing="false" onAction="#action_encriptar" prefHeight="52.0" prefWidth="201.0" text="Encriptar">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="355.0" layoutY="208.0" mnemonicParsing="false" onAction="#select_archivo" prefHeight="28.0" prefWidth="266.0" text="Selecciona el Archivo">
+      <Button fx:id="archivo" layoutX="355.0" layoutY="208.0" mnemonicParsing="false" onAction="#select_archivo" prefHeight="28.0" prefWidth="266.0" text="Selecciona el Archivo">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button layoutX="355.0" layoutY="277.0" mnemonicParsing="false" onAction="#select_destino" prefHeight="28.0" prefWidth="266.0" text="Selecciona el Destino">
+      <Button fx:id="archivo_salida" layoutX="355.0" layoutY="277.0" mnemonicParsing="false" onAction="#select_destino" prefHeight="28.0" prefWidth="266.0" text="Selecciona el Destino">
          <font>
             <Font size="16.0" />
          </font>

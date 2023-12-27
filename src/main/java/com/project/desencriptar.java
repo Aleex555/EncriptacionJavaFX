@@ -172,11 +172,7 @@ public class desencriptar implements Initializable {
         for (String[] listElement : list) {
             FXMLLoader loader = new FXMLLoader(resource);
             Parent itemTemplate = loader.load();
-            ControllerListItem itemController = loader.getController();
-
-            itemController.setTitle(listElement[1]);
-            itemController.setSubtitle(listElement[0]);
-            itemController.setCircleColor(listElement[2]);
+            EncriptadorGPG itemController = loader.getController();
 
             yPane.getChildren().add(itemTemplate);
         }
