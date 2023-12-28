@@ -20,6 +20,9 @@ public class Main extends Application {
         UtilsViews.parentContainer.setStyle("-fx-font: 14 arial;");
         UtilsViews.addView(getClass(), "layout_principal", "/assets/layout_principal.fxml");
         UtilsViews.addView(getClass(), "layout_encriptar", "/assets/layout_encriptar.fxml");
+        UtilsViews.addView(getClass(), "layout_desencriptar", "/assets/layout_desencriptar.fxml");
+        UtilsViews.addView(getClass(), "layout_resultado", "/assets/layout_resultado.fxml");
+        UtilsViews.addView(getClass(), "layout_resultado_error", "/assets/layout_resultado_error.fxml");
 
         Scene scene = new Scene(UtilsViews.parentContainer);
 

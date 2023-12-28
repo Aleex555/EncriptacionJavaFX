@@ -21,7 +21,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Label fx:id="resultado" alignment="CENTER" layoutX="172.0" layoutY="158.0" prefHeight="104.0" prefWidth="366.0" text="FUNCIONO" textAlignment="CENTER">
+      <Label fx:id="resultado" alignment="CENTER" layoutX="172.0" layoutY="158.0" prefHeight="104.0" prefWidth="366.0" text="ERROR" textAlignment="CENTER">
          <font>
             <Font size="48.0" />
          </font>

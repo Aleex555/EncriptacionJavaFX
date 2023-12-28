@@ -1,56 +1,104 @@
 package com.project;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openpgp.*;
-import org.bouncycastle.openpgp.jcajce.JcaPGPObjectFactory;
-import org.bouncycastle.openpgp.jcajce.JcaPGPPublicKeyRingCollection;
+import org.bouncycastle.openpgp.operator.PBESecretKeyDecryptor;
 import org.bouncycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
+import org.bouncycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
+import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactoryBuilder;
 
 import java.io.*;
-import java.security.NoSuchProviderException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DesencriptadorGPG {
 
-    public static void desencriptarArchivo(File archivoEntrada, File archivoSalida, File clavePrivadaFile,
-            char[] passphrase)
-            throws IOException, PGPException, NoSuchProviderException {
+    static {
+     
+        Security.addProvider(new BouncyCastleProvider());
+    }
+
+    public static void desencriptarArchivo(File archivoEntrada, File archivoSalida, File clavePrivadaFile, String clavePrivadaPassphrase)
+            throws IOException, PGPException, NoSuchAlgorithmException {
         try (
                 FileInputStream clavePrivadaStream = new FileInputStream(clavePrivadaFile);
                 FileInputStream archivoEntradaStream = new FileInputStream(archivoEntrada);
-                FileOutputStream archivoSalidaStream = new FileOutputStream(archivoSalida);) {
-            PGPObjectFactory pgpObjectFactory = new PGPObjectFactory(PGPUtil.getDecoderStream(archivoEntradaStream),
-                    null);
-            PGPEncryptedDataList encList = (PGPEncryptedDataList) pgpObjectFactory.nextObject();
+                FileOutputStream archivoSalidaStream = new FileOutputStream(archivoSalida)
+        ) {
+            PGPPrivateKey clavePrivada = cargarClavePrivada(clavePrivadaStream, clavePrivadaPassphrase);
 
-            PGPPublicKeyEncryptedData encData = (PGPPublicKeyEncryptedData) encList.get(0);
-            PGPSecretKeyRingCollection pgpSec = new PGPSecretKeyRingCollection(
-                    PGPUtil.getDecoderStream(clavePrivadaStream), new JcaKeyFingerprintCalculator());
+            PGPObjectFactory objetoFactory = new PGPObjectFactory(PGPUtil.getDecoderStream(archivoEntradaStream),
+                    new JcaKeyFingerprintCalculator());
 
-            PGPSecretKey secretKey = pgpSec.getSecretKey(encData.getKeyID());
-            InputStream clear = encData.getDataStream(
-                    new JcaPGPDataDecryptorFactoryBuilder().setProvider("BC")
-                            .build(secretKey.extractPrivateKey(passphrase)));
+            PGPEncryptedDataList datosEncriptados = (PGPEncryptedDataList) objetoFactory.nextObject();
+            PGPPublicKeyEncryptedData datosEncriptadosSeleccionado = seleccionarDatosEncriptados(datosEncriptados);
 
-            pgpObjectFactory = new PGPObjectFactory(clear);
-            Object message = pgpObjectFactory.nextObject();
+            InputStream datosDesencriptadosStream = datosEncriptadosSeleccionado.getDataStream(
+                    new JcePublicKeyDataDecryptorFactoryBuilder()
+                            .setProvider("BC")
+                            .build(clavePrivada));
 
-            if (message instanceof PGPCompressedData) {
-                PGPCompressedData compressedData = (PGPCompressedData) message;
-                pgpObjectFactory = new PGPObjectFactory(compressedData.getDataStream());
-                message = pgpObjectFactory.nextObject();
-            }
-
-            if (message instanceof PGPLiteralData) {
-                PGPLiteralData literalData = (PGPLiteralData) message;
-                try (InputStream unc = literalData.getInputStream();
-                        OutputStream fOut = new BufferedOutputStream(new FileOutputStream(archivoSalida))) {
-
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = unc.read(buffer)) != -1) {
-                        fOut.write(buffer, 0, bytesRead);
-                    }
-                }
-            }
+            descomprimirYGuardar(datosDesencriptadosStream, archivoSalidaStream);
         }
     }
+
+    private static PGPPublicKeyEncryptedData seleccionarDatosEncriptados(PGPEncryptedDataList datosEncriptados) {
+        for (PGPEncryptedData datos : datosEncriptados) {
+            if (datos instanceof PGPPublicKeyEncryptedData) {
+                return (PGPPublicKeyEncryptedData) datos;
+            }
+        }
+        return null;
+    }
+
+    private static PGPPrivateKey cargarClavePrivada(InputStream in, String passphrase)
+            throws IOException, PGPException {
+        try (InputStream clavePrivadaStream = PGPUtil.getDecoderStream(in)) {
+            PGPSecretKeyRingCollection secretKeyRingCollection = new PGPSecretKeyRingCollection(
+                    PGPUtil.getDecoderStream(clavePrivadaStream),
+                    new JcaKeyFingerprintCalculator());
+
+            List<PGPSecretKeyRing> secretKeyRings = new ArrayList<>();
+            secretKeyRingCollection.getKeyRings().forEachRemaining(secretKeyRings::add);
+
+            PGPSecretKey claveSecreta = secretKeyRings.get(0).getSecretKeys().next();
+
+            PBESecretKeyDecryptor secretKeyDecryptor = new JcePBESecretKeyDecryptorBuilder()
+                    .setProvider("BC")
+                    .build(passphrase.toCharArray());
+
+            return claveSecreta.extractPrivateKey(secretKeyDecryptor);
+        }
+    }
+
+    private static void descomprimirYGuardar(InputStream in, OutputStream out) throws IOException, PGPException {
+        PGPObjectFactory objetoFactory = new PGPObjectFactory(in, new JcaKeyFingerprintCalculator());
+        Object objeto = objetoFactory.nextObject();
+    
+        if (objeto instanceof PGPCompressedData) {
+            PGPCompressedData datosComprimidos = (PGPCompressedData) objeto;
+            try (InputStream datosDescomprimidosStream = new BufferedInputStream(datosComprimidos.getDataStream());
+                 OutputStream datosDescomprimidosOut = new BufferedOutputStream(out)) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = datosDescomprimidosStream.read(buffer)) != -1) {
+                    datosDescomprimidosOut.write(buffer, 0, bytesRead);
+                }
+            }
+        } else if (objeto instanceof PGPLiteralData) {
+            PGPLiteralData literalData = (PGPLiteralData) objeto;
+            try (InputStream literalDataStream = literalData.getInputStream()) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = literalDataStream.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+            }
+        } else {
+            throw new PGPException("Tipo de dato PGP no compatible: " + objeto.getClass().getName());
+        }
+    }
+    
 }

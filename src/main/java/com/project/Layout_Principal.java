@@ -12,7 +12,7 @@ public class Layout_Principal {
 
     @FXML
     private void desencriptar_boton(ActionEvent event) {
-        UtilsViews.setView("layout_principal");
+        UtilsViews.setView("layout_desencriptar");
     }
 
 }

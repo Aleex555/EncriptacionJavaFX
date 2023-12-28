@@ -3,6 +3,7 @@ package com.project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -13,15 +14,13 @@ import java.security.NoSuchAlgorithmException;
 
 import org.bouncycastle.openpgp.PGPException;
 
-public class EncriptarController {
+public class DesencriptarController {
     File archivoEntrada;
     File archivoSalida;
-    File clave_publica1;
-
-
+    File claveprivada;
 
     @FXML
-    private Button archivo, archivo_salida, id_clave_publica;
+    private Button archivo, archivo_salida, clave_privada;
 
     @FXML
     private void back(ActionEvent event) {
@@ -29,30 +28,27 @@ public class EncriptarController {
     }
 
     @FXML
-    private void action_encriptar(ActionEvent event) {
-        
+    private PasswordField id_contra;
 
 
-
-        if (archivoEntrada != null && archivoSalida != null && clave_publica1 != null) {
-
-            System.out.println(archivoEntrada.getName());
+    @FXML
+    private void action_desencriptar(ActionEvent event) {
+    if (archivoEntrada != null && archivoSalida != null && claveprivada != null && id_contra.getText() != null) {
+        System.out.println(archivoEntrada.getName());
         System.out.println(archivoSalida.getName());
-        System.out.println(clave_publica1.getName());
-            try {
-                EncriptadorGPG.encriptarArchivo(archivoEntrada, archivoSalida, clave_publica1);
-                UtilsViews.setView("layout_resultado");
-            } catch (IOException | PGPException | NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-        }else{
-           
-            UtilsViews.setView("layout_resultado_error");
+        System.out.println(claveprivada.getName());
+        System.out.println(id_contra.getText());
+        try {
+            DesencriptadorGPG.desencriptarArchivo(archivoEntrada, archivoSalida, claveprivada, id_contra.getText());
+            UtilsViews.setView("layout_resultado");
+        } catch (IOException | PGPException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
-
-        
+    } else {
+        UtilsViews.setView("layout_resultado_error");
     }
-    
+}
+
 
     @FXML
     private void select_archivo(ActionEvent event) {
@@ -75,12 +71,12 @@ public class EncriptarController {
     }
 
     @FXML
-    private void clave_publica(ActionEvent event) {
+    private void clave_privada(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona el Archivo de Salida");
-        clave_publica1 = fileChooser.showOpenDialog(new Stage());
-        if (clave_publica1 != null) {
-            id_clave_publica.setText(clave_publica1.getName());
+        claveprivada = fileChooser.showOpenDialog(new Stage());
+        if (clave_privada != null) {
+            clave_privada.setText(claveprivada.getName());
         }
     }
 
